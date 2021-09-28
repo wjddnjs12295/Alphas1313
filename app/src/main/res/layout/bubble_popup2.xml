@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
 	android:orientation="vertical"
-    android:layout_height="wrap_content">
+	android:layout_height="wrap_content">
 	<LinearLayout
 		android:layout_width="100dp"
 		android:layout_height="40dp"
 		android:id="@+id/bubble_popup_bg"
 		android:orientation="vertical"
 		android:gravity="center"
-		android:background="@mipmap/bubble" >
+		android:background="@mipmap/click_bubble" >
 
 		<LinearLayout
 			android:layout_width="wrap_content"
@@ -19,13 +19,14 @@
 			android:layout_marginBottom="10dp"
 			android:orientation="horizontal" >
 
+
 			<TextView android:id="@+id/bubble_title"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:textColor="#FFFFFF"
 				android:maxEms="7"
 				android:maxLines="1"
 				android:ellipsize="end"
-				android:textColor="#000000"
 				android:gravity="center"
 				android:textSize="12sp"
 				android:text="Title" />
@@ -38,7 +39,7 @@
 				android:textSize="12sp"
 				android:text="" />
 		</LinearLayout>
-</LinearLayout>
+	</LinearLayout>
 	<LinearLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

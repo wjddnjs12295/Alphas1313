@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -66,6 +69,7 @@ public class MapPage extends AppCompatActivity
     private String totalDistance = null;
     private String totalTime = null;
 
+
     //마커핀 주소
     private String address;
     //마커핀 위경도
@@ -107,9 +111,12 @@ public class MapPage extends AppCompatActivity
     private Bitmap endbit = null;
     private final TMapMarkerItem endItem = new TMapMarkerItem();
 
-    private final Bitmap bubble = null;
-
-    private MarkerOverlay bubblemarker = null;
+    private TMapPoint tpoint = null;
+    private String storename;
+    customView custom;
+    clickcustomView clickcustom;
+    Bitmap bi;
+    Bitmap cbi;
 
     @Override
     public void onLocationChange(Location location) {
@@ -167,8 +174,8 @@ public class MapPage extends AppCompatActivity
                 @Override
                 public void granted() {
                     if (gps != null) {
-                        gps.setMinTime(10);
-                        gps.setMinDistance((float) 0.1);
+                        gps.setMinTime(500);
+                        gps.setMinDistance((float) 1);
 //                        gps.setProvider(gps.GPS_PROVIDER);
 //                        gps.OpenGps();
                         gps.setProvider(TMapGpsManager.NETWORK_PROVIDER);
@@ -201,10 +208,12 @@ public class MapPage extends AppCompatActivity
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_page);
+
 
         totalDistance = null;
         totalTime = null;
@@ -272,10 +281,10 @@ public class MapPage extends AppCompatActivity
         RelativeLayout relativeLayout2 = findViewById(R.id.mapui1);
         mMapView  = new TMapView(this);
 
-        relativeLayout.addView(mMapView );
+        relativeLayout.addView(mMapView);
         relativeLayout1.bringToFront();
         relativeLayout2.bringToFront();
-        mMapView .setSKTMapApiKey(mApiKey);
+        mMapView.setSKTMapApiKey(mApiKey);
         mMapView.setTrackingMode(true);
 
         gps = new TMapGpsManager(MapPage.this);
@@ -309,7 +318,8 @@ public class MapPage extends AppCompatActivity
 
             @Override
             public void onCalloutMarker2ClickEvent(String id, TMapMarkerItem2 markerItem2) {
-                Log.d("adsfasdfasdfadsfasdfadsf","무야호");
+                locationBtn.setBackgroundResource(R.drawable.location_btn);
+                relativeLayout1.setVisibility(View.VISIBLE);
             }
         });
 
@@ -324,19 +334,25 @@ public class MapPage extends AppCompatActivity
 
             @Override
             public boolean onPressEvent(ArrayList<TMapMarkerItem> markerlist, ArrayList<TMapPOIItem> poilist, TMapPoint point, PointF pointf) {
+                setTrackingMode(false);
                 relativeLayout1.setVisibility(View.GONE);
                 mMapView.removeAllTMapPolyLine();
-
-
-
+                locationBtn.setBackgroundResource(R.drawable.location_btn);
                 if(markerlist.size() != 0){
                     TMapPoint point4 = markerlist.get(0).getTMapPoint();
                     Log.d("aaaaaaaaaaaaaaaaaaaaa", "hhhhhhhhhhhhhhhhh"+markerlist.get(0));
                     endPoint = point4;
+                    clickcustom = new clickcustomView(MapPage.this, endItem.getName());
+                    Log.d("오우야",""+endItem.getName());
+                    View cv = clickcustom.getView();
+                    String ct = (String) ((TextView)cv.findViewById(R.id.bubble_title)).getText();
+                    Log.d("@@@@", ""+ ct);
+                    cbi = createBitmapFromLayout(cv);
                     drawPedestrianPath();
-//                    routeLayout.setVisibility(View.VISIBLE);
+                    routeLayout.setVisibility(View.VISIBLE);
                     locationBtn.setBackgroundResource(R.drawable.location_btn);
                     relativeLayout1.setVisibility(View.VISIBLE);
+                    mMapView.setCenterPoint(point4.getLongitude(), point4.getLatitude());
                 }
                 return false;
             }
@@ -348,14 +364,28 @@ public class MapPage extends AppCompatActivity
         locationBtn.performClick();
     }
 
+
+    private Bitmap createBitmapFromLayout(View tv) {
+        int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        tv.measure(spec, spec);
+        tv.layout(0, 0, tv.getMeasuredWidth(), tv.getMeasuredHeight());
+        Bitmap b = Bitmap.createBitmap(tv.getMeasuredWidth(), tv.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        c.translate((-tv.getScrollX()), (-tv.getScrollY()));
+        tv.draw(c);
+        return b;
+    }
+
+
     public void setGps() {
         final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                10, // 통지사이의 최소 시간간격 (miliSecond)
-                1, // 통지사이의 최소 변경거리 (m)
+                1000, // 통지사이의 최소 시간간격 (miliSecond)
+                1000, // 통지사이의 최소 변경거리 (m)
                 mLocationListener);
     }
 
@@ -363,7 +393,6 @@ public class MapPage extends AppCompatActivity
 
     //핀 찍을 data
     public void addPoint() {
-        // 강남 //
         m_mapPoint.add(new MapPoint("센텀시티", 35.168827, 129.131745));
         m_mapPoint.add(new MapPoint("센텀수영강변2차 e편한세상아파트", 35.18230966959019, 129.11610345559023));
         m_mapPoint.add(new MapPoint("빽다방 샌텀SH밸리점", 35.17280698833681, 129.13104780722543));
@@ -372,47 +401,44 @@ public class MapPage extends AppCompatActivity
     }
 
     // 마커(핀) 찍는함수
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public void showMarkerPoint() {
         for (int i = 0; i < m_mapPoint.size(); i++) {
-            TMapPoint point = new TMapPoint(m_mapPoint.get(i).getLatitude(),
+            tpoint = new TMapPoint(m_mapPoint.get(i).getLatitude(),
                     m_mapPoint.get(i).getLongitude());
+
+            storename = m_mapPoint.get(i).getName();
+            custom = new customView(this, storename);
+            Log.d("storename", ""+ storename);
+            View v = custom.getView();
+            String t = (String) ((TextView)v.findViewById(R.id.bubble_title)).getText();
+            Log.d("@@@@", ""+ t);
+            bi = createBitmapFromLayout(v);
+
+
+//            clickcustom = new clickcustomView(this, storename);
+//            View cv = clickcustom.getView();
+//            String ct = (String) ((TextView)v.findViewById(R.id.bubble_title)).getText();
+//            Log.d("@@@@", ""+ ct);
+//            cbi = createBitmapFromLayout(cv);
+
+            MapPage mContext = this;
             storeItem = new TMapMarkerItem();
 
             String strID = String.format("pmarker%d", mMarkerID++);
 
             /** 핀 이미지 */
-            storebit = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.poi_dot);
+//            storebit = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon);
 
-
-///여기
-            mContext = this;
-            bubblemarker = new MarkerOverlay( mContext, m_mapPoint.get(i).getName(), "");
-
-
-            bubblemarker.setPosition(0.2f,0.2f);
-            bubblemarker.getTMapPoint();
-            bubblemarker.setID(strID);
-            bubblemarker.setTMapPoint(new TMapPoint(point.getLatitude(), point.getLongitude()));
-//            bubblemarker.setMarkerTouch(true);
-
-            //            bubblemarker.onSingleTapUp()
-            mMapView.showCallOutViewWithMarkerItemID(bubblemarker.getID());
-            mMapView.addMarkerItem2(strID, bubblemarker);
-
-
-            storeItem.setTMapPoint(point);
+            storeItem.setTMapPoint(tpoint);
             storeItem.setName(m_mapPoint.get(i).getName());
             storeItem.setVisible(TMapMarkerItem.VISIBLE);
-            storeItem.setIcon(storebit);
-
+            storename = m_mapPoint.get(i).getName();
+            storeItem.setIcon(bi);
             storeItem.setCalloutTitle(m_mapPoint.get(i).getName());
-            storeItem.setCanShowCallout(false);
-            storeItem.setAutoCalloutVisible(false);
-
-
-
             mMapView .addMarkerItem(strID, storeItem);
             mArrayMarkerID.add(strID);
+
         }
     }
 
@@ -422,15 +448,6 @@ public class MapPage extends AppCompatActivity
         setTrackingMode(false);
     }
 
-    public TMapPoint randomTMapPoint() {
-        /** 풍선마크에 따른 위경도 설정*/
-        double latitude = lat;
-        double longitude = lon;
-
-        TMapPoint point = new TMapPoint(latitude, longitude);
-
-        return point;
-    }
 
     private String getContentFromNode(Element item, String tagName) {
         NodeList list = item.getElementsByTagName(tagName);
@@ -448,7 +465,7 @@ public class MapPage extends AppCompatActivity
         totalDistance = null;
         totalTime = null;
 
-        //TMapPoint point1 = mMapView.getCenterPoint();
+//        TMapPoint point1 = mMapView.getCenterPoint();
 
         TMapPoint point1 =new TMapPoint(latitude, longitude);
         Log.d("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ",""+point1.getLongitude());
@@ -498,9 +515,9 @@ public class MapPage extends AppCompatActivity
                     }
 
 
-                    mMapView.setCenterPoint(info.getTMapPoint().getLongitude(), info.getTMapPoint().getLatitude());
+//                    mMapView.setCenterPoint(info.getTMapPoint().getLongitude(), info.getTMapPoint().getLatitude());
 
-                    mMapView.addTMapPolyLine("t",polyline);
+//                    mMapView.addTMapPolyLine("t",polyline);
 
                     int totalSec = Integer.parseInt(totalTime);
                     int day = totalSec / (60 * 60 * 24);
@@ -514,21 +531,24 @@ public class MapPage extends AppCompatActivity
                     }
 
                     if(Double.parseDouble(totalDistance) < 1000){
+                        double km = Double.parseDouble(totalDistance) / 1000;
+                        String km1 = String.format("%.1f", km);
 //                        routeDistance.setText("총 거리 : " + Double.parseDouble(totalDistance) + "m");
-                        routeDistance.setText("" + Double.parseDouble(totalDistance));
+                        routeDistance.setText(km1+"km");
                         Log.d("ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ","거리"+ Double.parseDouble(totalDistance));
                     }else {
                         double km = Double.parseDouble(totalDistance) / 1000;
+                        String km1 = String.format("%.1f", km);
 //                        routeDistance.setText("총 거리 : " + km + "km");
-                        routeDistance.setText("" + km);
+                        routeDistance.setText(km1+"km");
                         Log.d("ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ","거리"+km);
-                        zoom = 15;
-
                     }
 
                     if(Double.parseDouble(totalDistance) < 500){
+                        double km = Double.parseDouble(totalDistance) / 1000;
+                        String km1 = String.format("%.1f", km);
 //                        routeDistance.setText("총 거리 : " + Double.parseDouble(totalDistance) + "m");
-                        routeDistance.setText("" + Double.parseDouble(totalDistance));
+                        routeDistance.setText(km1+"km");
                         Log.d("ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ","거리"+ Double.parseDouble(totalDistance));
                     }
 
@@ -545,7 +565,7 @@ public class MapPage extends AppCompatActivity
                     startItem.setVisible(TMapMarkerItem.VISIBLE);
                     startbit = BitmapFactory.decodeResource(getResources(),R.mipmap.start);
                     startItem.setIcon(startbit);
-                    mMapView.addMarkerItem("t1",startItem);
+//                    mMapView.addMarkerItem("t1",startItem);
 
                     if(mMapView.getMarkerItemFromID("t") != null) {
                         mMapView.removeMarkerItem("t");
@@ -553,15 +573,14 @@ public class MapPage extends AppCompatActivity
 
                     endItem.setTMapPoint(point2);
                     endItem.setVisible(TMapMarkerItem.VISIBLE);
-                    endbit = BitmapFactory.decodeResource(getResources(), R.mipmap.poi_dot);
-                    endItem.setIcon(endbit);
+                    endItem.setIcon(cbi);
 
                     mMapView.addMarkerItem("t", endItem);
 
-
-
                 }
                 mMapView.sendMarkerToBack(storeItem);
+                mMapView.removeAllTMapPolyLine();
+
             }
         });
     }
