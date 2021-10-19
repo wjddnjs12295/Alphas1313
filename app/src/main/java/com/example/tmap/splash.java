@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-public class splash  extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class splash extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     //    static final int PERMISSIONS_REQQUEST = 0x0000001;
 //
@@ -119,20 +119,21 @@ public class splash  extends AppCompatActivity implements ActivityCompat.OnReque
         } catch (Exception ignored) {
         }
     }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permission, int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, String[] permission, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permission, grantResults);
         final Intent intent = new Intent(getApplicationContext(), MainPage.class);
         Log.d("tq", "tq");
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d("adfsasdfsda","asfsadfasdfsdaf");
-                    startActivity(intent);
-                    splash.this.finish();
-                }
-            }, 3000);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("adfsasdfsda", "asfsadfasdfsdaf");
+                startActivity(intent);
+                splash.this.finish();
+            }
+        }, 3000);
 
     }
 
@@ -143,13 +144,13 @@ public class splash  extends AppCompatActivity implements ActivityCompat.OnReque
             requestSapPermissions();
         }
         final Intent intent = new Intent(getApplicationContext(), MainPage.class);
-        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            Log.d("s","12315641984");
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Log.d("s", "12315641984");
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d("adfsasdfsda","asfsadfasdfsdaf");
+                    Log.d("adfsasdfsda", "asfsadfasdfsdaf");
                     startActivity(intent);
                     splash.this.finish();
                 }

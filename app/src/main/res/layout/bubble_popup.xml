@@ -1,49 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
-	android:orientation="vertical"
-    android:layout_height="wrap_content">
-	<LinearLayout
-		android:layout_width="100dp"
-		android:layout_height="40dp"
-		android:id="@+id/bubble_popup_bg"
-		android:orientation="vertical"
-		android:gravity="center"
-		android:background="@mipmap/bubble" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:paddingLeft="5dp"
-			android:paddingRight="5dp"
-			android:layout_marginBottom="10dp"
-			android:orientation="horizontal" >
+    <LinearLayout
+        android:id="@+id/bubble_popup_bg"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:background="@mipmap/bubble"
+        android:gravity="center"
+        android:orientation="vertical">
 
-			<TextView android:id="@+id/bubble_title"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:maxEms="7"
-				android:maxLines="1"
-				android:ellipsize="end"
-				android:textColor="#000000"
-				android:gravity="center"
-				android:textSize="12sp"
-				android:text="Title" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
-			<TextView android:id="@+id/bubble_subtitle"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textColor="#000000"
-				android:gravity="center"
-				android:textSize="12sp"
-				android:text="" />
-		</LinearLayout>
-</LinearLayout>
-	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:layout_gravity="center"
-		android:background="@mipmap/poi_dot2" >
-	</LinearLayout>
+            <TextView
+                android:id="@+id/bubble_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/nanumsquare_r"
+                android:gravity="center"
+                android:maxEms="7"
+                android:maxLines="1"
+                android:text="Title"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/bubble_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="2dp"
+        android:background="@mipmap/poi_dot"
+        android:gravity="center"></LinearLayout>
 </LinearLayout>

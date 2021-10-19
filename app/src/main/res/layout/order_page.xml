@@ -1,322 +1,315 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/backbtn"
+            android:layout_width="12dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="24dp"
+            android:background="@mipmap/pre"></Button>
+
+        <TextView
+            android:id="@+id/storename"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:fontFamily="@font/nanumsquare_b"
+            android:gravity="center"
+            android:text="빽다방 센텀SH지점"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="bold"></TextView>
+
+        <Button
+            android:id="@+id/storeinfo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="24dp"
+            android:background="@mipmap/info"></Button>
+    </RelativeLayout>
+
+    <com.amar.library.ui.StickyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/up"
+        android:background="@color/white"
+        app:stickyHeader="@+id/title"
+        tools:context=".MainActivity">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <RelativeLayout
-            android:background="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/backbtn"
-                android:background="@mipmap/pre"
-                android:layout_marginLeft="25dp"
+
+            <ImageView
+                android:id="@+id/storeimage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/backs" />
+
+            <LinearLayout
+                android:id="@+id/other_product"
+                android:layout_width="match_parent"
+                android:layout_height="155dp"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
                 android:layout_marginTop="20dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp">
-            </Button>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:gravity="center"
-                android:background="@color/white"
-                android:text="빽다방 센텀SH지점"
-                android:textColor="@color/black"
-                android:textSize="20dp">
-            </TextView>
-
-        </RelativeLayout>
-        <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-            <ScrollView
-
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:gravity="center">
+                android:layout_marginBottom="20dp">
+                <RelativeLayout
+                    android:background="@drawable/round_notice"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="20dp">
+                    <ImageView
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="17dp"
+                        android:background="@mipmap/notice"
+                        android:layout_width="24dp"
+                        android:layout_height="20dp">
+                    </ImageView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:fontFamily="@font/nanumsquare_b"
+                        android:text="공지사항">
+                    </TextView>
+                </RelativeLayout>
 
                 <LinearLayout
-                    android:id="@+id/imagebox"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
-                        <ImageView
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/backs">
-                        </ImageView>
-                    </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="9dp">
 
                     <LinearLayout
-                        android:layout_marginTop="15dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
                         <TextView
-                            android:layout_weight="2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nanumsquare_r"
                             android:text="영업시간"
                             android:textColor="@color/black"
-                            android:textSize="15dp">
-                        </TextView>
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="매일 아침 08:00 ~ 밤 22:00"
-                            android:layout_gravity="center"
-                            android:textColor="@color/black"
-                            android:textSize="15dp">
-                        </TextView>
-
+                            android:textSize="16dp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_weight="2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="휴무일"
-                            android:textColor="@color/black"
-                            android:textSize="15dp">
-                        </TextView>
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="연중무휴"
-                            android:layout_gravity="center"
-                            android:textColor="@color/black"
-                            android:textSize="15dp">
-                        </TextView>
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_marginTop="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_weight="2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="전화번호"
-                            android:textColor="@color/black"
-                            android:textSize="15dp">
-                        </TextView>
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="010-1234-5678"
-                            android:layout_gravity="center"
-                            android:textColor="@color/black"
-                            android:textSize="15dp">
-                        </TextView>
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_marginTop="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_weight="2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="주소"
-                            android:textColor="@color/black"
-                            android:textSize="15dp">
-                        </TextView>
-                        <TextView
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="부산 해운대구 센텀동로 35 SH밸리 101호"
-                            android:layout_gravity="center"
-                            android:textColor="@color/black"
-                            android:textSize="15dp">
-                        </TextView>
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="5dp"
-                            android:background="@color/gray">
-                        </TextView>
+                            android:id="@+id/storehour"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nanumsquare_r"
+                            android:text="08:00 ~ 22:00"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
                     </LinearLayout>
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="30dp"
-                                android:text="메뉴"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginLeft="30dp"
-                                android:textSize="20dp"
-                                android:textColor="@color/black">
-                            </TextView>
-
-                            <LinearLayout
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginRight="10dp"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-                                <Button
-                                    android:layout_weight="1"
-                                    android:text="커피"
-                                    android:background="@color/white"
-                                    android:textColor="@color/black"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                </Button>
-                                <Button
-                                    android:text="쥬스"
-                                    android:background="@color/white"
-                                    android:textColor="@color/black"
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                </Button>
-                                <Button
-                                    android:text="아이스크림"
-                                    android:background="@color/white"
-                                    android:textColor="@color/black"
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                </Button>
-                                <Button
-                                    android:text="디저트"
-                                    android:background="@color/white"
-                                    android:textColor="@color/black"
-                                    android:layout_weight="1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                </Button>
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginLeft="30dp"
-                                android:src="@mipmap/coffee"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp">
-                            </ImageView>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                </TextView>
-                            </LinearLayout>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginLeft="30dp"
-                                android:src="@mipmap/coffee"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp">
-                            </ImageView>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                </TextView>
-                            </LinearLayout>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginLeft="30dp"
-                                android:src="@mipmap/coffee"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp">
-                            </ImageView>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                </TextView>
-                            </LinearLayout>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginLeft="30dp"
-                                android:src="@mipmap/coffee"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp">
-                            </ImageView>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                </TextView>
-                            </LinearLayout>
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-
                 </LinearLayout>
 
-            </ScrollView>
-    </RelativeLayout>
-</LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="9dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nanumsquare_r"
+                            android:text="전화번호"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/storetel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nanumsquare_r"
+                            android:text="010-1234-1234"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nanumsquare_r"
+                            android:text="주소"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/storeaddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nanumsquare_r"
+                            android:text="부산 해운대구 센텀동로 35 SH밸리 101호123123123"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categorytitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal"></androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/menutitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:background="@color/backgray"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumsquare_b"
+                    android:text="유의사항"
+                    android:textColor="@color/black"
+                    android:textSize="12dp"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="· 메뉴 사진은 연출된 이미지로 실제 조리된 음식과 다를 수 있습니다."
+                    android:textColor="@color/black"
+                    android:textSize="10dp"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="· 메뉴 및 가격은 업소에서 제공한 정보를 기준으로 작성되었으며 언제든지 변동될 수있습니다."
+                    android:textColor="@color/black"
+                    android:textSize="10dp"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="· 워크오더는 상품거래에 대한 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서, 워크오더는 상품거래 정보 및 거래에 책임을 지지 않습니다"
+                    android:textColor="@color/black"
+                    android:textSize="10dp"></TextView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.amar.library.ui.StickyScrollView>
+
+    <LinearLayout
+        android:id="@+id/OrderBox"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/ordercheck"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/round_button"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/menured"
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="주문하기"
+            android:textColor="@color/white"
+            android:textSize="16dp"></TextView>
+    </LinearLayout>
+</RelativeLayout>

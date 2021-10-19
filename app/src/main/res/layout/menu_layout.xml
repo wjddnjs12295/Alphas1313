@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cell"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:background="@color/gray"></View>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/menuimage"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="24dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/coffee"></com.facebook.drawee.view.SimpleDraweeView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="90dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="24dp">
+
+                <TextView
+                    android:id="@+id/menuname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="Iced 앗메리카노"
+                    android:textColor="@color/black"></TextView>
+
+                <TextView
+                    android:id="@+id/menuprice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="2,000원"
+                    android:textColor="@color/black"></TextView>
+                <TextView
+                    android:id="@+id/optionitem"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:text=""></TextView>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

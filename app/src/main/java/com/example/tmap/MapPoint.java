@@ -5,7 +5,7 @@ public class MapPoint {
     private double latitude;
     private double longitude;
 
-    public MapPoint(){
+    public MapPoint() {
         super();
     }
 

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/backbtn"
+            android:layout_width="12dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="24dp"
+            android:background="@mipmap/pre"></Button>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:fontFamily="@font/nanumsquare_b"
+            android:gravity="center"
+            android:text="빽다방 센텀SH지점"
+            android:textColor="@color/black"
+            android:textSize="20dp"></TextView>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_marginBottom="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/up">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/out1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:id="@+id/itemimage"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@null"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/coffee" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/itemname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="26dp"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/nanumsquare_r"
+                            android:text="앗!메리카노 (HOT/ICED)"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/itemprice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="26dp"
+                            android:fontFamily="@font/nanumsquare_b"
+                            android:text="2,000원"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/out2"
+                    android:layout_below="@+id/out1"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/backgray">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:fontFamily="@font/nanumsquare_b"
+                        android:gravity="center"
+                        android:text="필수항목"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"></TextView>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_below="@id/out2"
+                    android:nestedScrollingEnabled="false"
+                    android:id="@+id/essential"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="horizontal"></androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_below="@id/essential"
+                    android:id="@+id/out3"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/backgray">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:gravity="center"
+                        android:text="선택항목"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:textStyle="bold"></TextView>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/selection"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/out3"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="horizontal"></androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:background="@drawable/topline"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp">
+
+            <TextView
+                android:layout_marginLeft="19dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/nanumsquare_eb"
+                android:gravity="center"
+                android:text="3,500원"
+                android:textColor="@color/menured"
+                android:textSize="22dp"></TextView>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:fontFamily="@font/nanumsquare_r"
+                android:gravity="center"
+                android:background="@drawable/whitebutton"
+                android:layout_gravity="center"
+                android:text="-"
+                android:textColor="@color/black"
+                android:textSize="22dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/nanumsquare_b"
+                android:gravity="center"
+                android:text="99"
+                android:textColor="@color/black"
+                android:textSize="22dp" />
+            <Button
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nanumsquare_r"
+                android:gravity="center"
+                android:text="+"
+                android:background="@drawable/whitebutton"
+                android:textColor="@color/black"
+                android:textSize="22dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/ordercheck">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/nanumsquare_b"
+                android:gravity="center"
+                android:text="담기"
+                android:textColor="@color/white"
+                android:textSize="16dp"></TextView>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

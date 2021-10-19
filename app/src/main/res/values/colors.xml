@@ -12,4 +12,10 @@
     <color name="colorPrimaryDark">#FF000000</color>
     <color name="textColorPrimary">#FF000000</color>
     <color name="gray">#E2E2E2</color>
+    <color name="darkgray">#AAAAAA</color>
+    <color name="backgray">#EEEEEE</color>
+    <color name="textgray">#717171</color>
+    <color name="menugray">#888888</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="menured">#E23939</color>
 </resources>
