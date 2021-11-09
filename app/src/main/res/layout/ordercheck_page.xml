@@ -7,19 +7,23 @@
     <RelativeLayout
         android:id="@+id/up"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:background="@android:color/transparent"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/backbtn"
-            android:layout_width="12dp"
-            android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="24dp"
-            android:background="@mipmap/pre"></Button>
+        <LinearLayout
+            android:id="@+id/checkback"
+            android:layout_width="50dp"
+            android:gravity="center"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/pre">
+            </ImageView>
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
@@ -29,7 +33,7 @@
             android:gravity="center"
             android:text="빽다방 센텀SH지점"
             android:textColor="@color/black"
-            android:textSize="20dp"></TextView>
+            android:textSize="16dp"></TextView>
     </RelativeLayout>
 
     <ScrollView
@@ -165,6 +169,7 @@
             android:layout_marginRight="24dp">
 
             <TextView
+                android:id="@+id/totalprice"
                 android:layout_marginLeft="19dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -195,7 +200,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/nanumsquare_b"
                 android:gravity="center"
-                android:text="99"
+                android:text="1"
                 android:textColor="@color/black"
                 android:textSize="22dp" />
             <Button

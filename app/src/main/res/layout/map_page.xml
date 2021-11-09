@@ -5,6 +5,20 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/timeimage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="350dp"
+            android:layout_height="550dp"
+            android:layout_gravity="center"
+            android:src="@drawable/map_image"></ImageView>
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/mapview"
@@ -84,9 +98,11 @@
                     android:layout_marginLeft="90dp"
                     android:layout_marginBottom="11.5dp"
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/map_storename"
                             android:layout_width="wrap_content"
@@ -98,18 +114,21 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="7dp"
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:orientation="horizontal">
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
+
                             <ImageView
                                 android:layout_width="10dp"
                                 android:layout_height="15dp"
                                 android:layout_gravity="center"
                                 android:src="@mipmap/map_km"></ImageView>
+
                             <TextView
                                 android:id="@+id/route_distance"
                                 android:layout_width="match_parent"
@@ -124,9 +143,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_marginLeft="19dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="19dp">
+
                             <ImageView
                                 android:layout_width="14dp"
                                 android:layout_height="14dp"
@@ -141,18 +161,21 @@
                                 android:layout_marginLeft="6dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/nanumsquare_r"
-                                android:text="5분"
+                                android:text="1255분"
                                 android:textColor="@android:color/black"
                                 android:textSize="14dp" />
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_marginTop="15dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp">
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -165,16 +188,17 @@
                                 android:textSize="14dp" />
 
                             <TextView
-                                android:layout_marginLeft="4dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginLeft="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/nanumsquare_b"
                                 android:gravity="center"
                                 android:text="10%"
                                 android:textColor="@color/menured"
                                 android:textSize="14dp" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -186,18 +210,20 @@
                                 android:textColor="@color/textgray"
                                 android:textSize="14dp" />
                         </LinearLayout>
+
                         <View
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginBottom="2dp"
-                            android:background="@color/darkgray"
                             android:layout_width="1dp"
-                            android:layout_height="match_parent">
-                        </View>
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="2dp"
+                            android:background="@color/darkgray"></View>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -210,10 +236,10 @@
                                 android:textSize="14dp" />
 
                             <TextView
-                                android:layout_marginLeft="4dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginLeft="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/nanumsquare_b"
                                 android:gravity="center"
@@ -221,18 +247,20 @@
                                 android:textColor="@android:color/black"
                                 android:textSize="14dp" />
                         </LinearLayout>
+
                         <View
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginBottom="2dp"
-                            android:background="@color/darkgray"
                             android:layout_width="1dp"
-                            android:layout_height="match_parent">
-                        </View>
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="2dp"
+                            android:background="@color/darkgray"></View>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -245,10 +273,10 @@
                                 android:textSize="14dp" />
 
                             <TextView
-                                android:layout_marginLeft="4dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:layout_marginLeft="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/nanumsquare_b"
                                 android:gravity="center"

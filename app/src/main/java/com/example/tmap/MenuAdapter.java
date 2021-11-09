@@ -18,6 +18,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
@@ -51,20 +52,27 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> 
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.menu_layout, parent, false);
-
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }
 
+    ArrayList<String> a = new ArrayList<>();
+    ArrayList<String> b = new ArrayList<>();
+    int count = 0;
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         OrderMenuData news = mDataset.get(position);
         String price;
         price = news.getPrice();
-        price = price.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+//        Log.d("틔틔틔", "" + price);
+
+        a.add(news.getCategoryidid());
+        b.add(news.getName());
+        Log.d("확확차",""+a.get(position));
+        Log.d("확확차1",""+news.getName());
 
         holder.TextViewTitle.setText(news.getName());
-        holder.TextViewContent.setText(price);
+        holder.TextViewContent.setText(news.getPrice());
         Uri uri = Uri.parse(news.getUrlToImage());
         holder.ImageViewtitle.setImageURI(uri);
         holder.Optionstirng.setText(news.getOption());

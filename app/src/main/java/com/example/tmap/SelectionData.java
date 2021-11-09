@@ -3,22 +3,22 @@ package com.example.tmap;
 import java.io.Serializable;
 
 public class SelectionData implements Serializable {
-    private String etitle;
-    private String eprice;
+    private String stitle;
+    private String sprice;
 
-    public String getETitle() {
-        return etitle;
+    public String getSTitle() {
+        return stitle;
     }
 
-    public void setETitle(String etitle) {
-        this.etitle = etitle;
+    public void setSTitle(String stitle) {
+        this.stitle = stitle;
     }
 
-    public String getEPrice() {
-        return eprice;
+    public String getSPrice() {
+        return sprice;
     }
 
-    public void setEPrice(String eprice) {
-        this.eprice = eprice;
+    public void setSPrice(String sprice) {
+        this.sprice = sprice;
     }
 }

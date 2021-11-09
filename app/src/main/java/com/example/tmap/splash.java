@@ -123,7 +123,7 @@ public class splash extends AppCompatActivity implements ActivityCompat.OnReques
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permission, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permission, grantResults);
-        final Intent intent = new Intent(getApplicationContext(), MainPage.class);
+        final Intent intent = new Intent(getApplicationContext(), LoginPage.class);
         Log.d("tq", "tq");
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -143,7 +143,7 @@ public class splash extends AppCompatActivity implements ActivityCompat.OnReques
         if (!checkPermission()) {
             requestSapPermissions();
         }
-        final Intent intent = new Intent(getApplicationContext(), MainPage.class);
+        final Intent intent = new Intent(getApplicationContext(), LoginPage.class);
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Log.d("s", "12315641984");
             Handler handler = new Handler();

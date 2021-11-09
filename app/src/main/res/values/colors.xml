@@ -15,6 +15,7 @@
     <color name="darkgray">#AAAAAA</color>
     <color name="backgray">#EEEEEE</color>
     <color name="textgray">#717171</color>
+    <color name="linegray">#707070</color>
     <color name="menugray">#888888</color>
     <color name="colorAccent">#D81B60</color>
     <color name="menured">#E23939</color>

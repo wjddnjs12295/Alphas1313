@@ -242,8 +242,6 @@ public class RoadPage extends AppCompatActivity
         road = findViewById(R.id.road);
         locationBtn = findViewById(R.id.location_btn);
 
-        routeLayout = findViewById(R.id.route_layout);
-
         routeDistance = findViewById(R.id.route_distance);
         routeTime = findViewById(R.id.route_time);
         mapstorename = findViewById(R.id.map_storename);

@@ -7,7 +7,12 @@
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/background_rounding.xml" value="0.38871794871794874" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/border_bottom.xml" value="0.21354166666666666" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/borderline.xml" value="0.3764102564102564" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/custom_checkbox.xml" value="0.3764102564102564" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/dialogradius.xml" value="0.2296875" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22083333333333333" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/loginemail_left.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/loginpassword_left.xml" value="0.20989583333333334" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/mycheck.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/orderbutton.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/ordercheck.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/drawable/round_button.xml" value="0.38229166666666664" />
@@ -19,15 +24,21 @@
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/font/font_custom.xml" value="0.3902564102564103" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/activity_splash.xml" value="0.2046875" />
-        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/bubble_popup.xml" value="0.5" />
-        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/bubble_popup2.xml" value="0.7566539923954373" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/bubble_popup.xml" value="1.1" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/bubble_popup2.xml" value="0.9" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/bubble_popup3.xml" value="0.75" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/category_layout.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/category_layout1.xml" value="0.33" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/categorylaout.xml" value="0.25" />
-        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/essential_layout.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/essential_layout.xml" value="0.67" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/location.xml" value="0.25" />
-        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/main_page.xml" value="0.15" />
-        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/map_page.xml" value="0.2" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/login_page.xml" value="0.25" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/main_page.xml" value="0.33" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/map_dialog.xml" value="0.33" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/map_page.xml" value="0.22" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/menu_header.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/menu_layout.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/menucategory_layout.xml" value="0.25" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/menulaout.xml" value="0.25" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/mylocation.xml" value="0.20104166666666667" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/order_page.xml" value="0.25" />
@@ -38,6 +49,7 @@
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/row_news.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/selection_layout.xml" value="1.0" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/shopping_page.xml" value="0.2" />
+        <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/signup_page.xml" value="0.33" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/storeinfo_page.xml" value="0.36051899907321594" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/layout/whitebutton.xml" value="0.2015625" />
         <entry key="..\:/Users/office01/AndroidStudioProjects/Tmap/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3296296296296296" />

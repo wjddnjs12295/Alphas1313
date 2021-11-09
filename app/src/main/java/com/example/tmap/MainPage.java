@@ -12,9 +12,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,17 +60,6 @@ public class MainPage extends AppCompatActivity {
 
     private long backkeypressedtime = 0;
 
-    @Override
-    public void onBackPressed(){
-        if (System.currentTimeMillis() > backkeypressedtime + 2000){
-            backkeypressedtime = System.currentTimeMillis();
-            Toast.makeText(this, "\'뒤로가기\' 버튼을 한번더 누르시면 종료됩니다.",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (System.currentTimeMillis() <= backkeypressedtime +2000){
-            finish();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +92,18 @@ public class MainPage extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        if (System.currentTimeMillis() > backkeypressedtime + 2000){
+            backkeypressedtime = System.currentTimeMillis();
+            Toast.makeText(this, "\'뒤로가기\' 버튼을 한번더 누르시면 종료됩니다.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (System.currentTimeMillis() <= backkeypressedtime +2000){
+            finish();
+        }
+    }
+
     private void OnCheckPermission() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -116,9 +121,13 @@ public class MainPage extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         PERMISSIONS_REQQUEST);
-                AlertDialog.Builder localBuilder = new AlertDialog.Builder(this);
+                AlertDialog.Builder localBuilder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog);
                 localBuilder.setTitle("권한 설정")
                         .setMessage("권한 거절로 인해 일부기능이 제한됩니다.\n(권한 설정 방법: 권한 -> 위치 -> 앱 사용중에만 허용)")
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface paramAnonymousDialogInterface, int paramAnonymousInt) {
+                            }
+                        })
                         .setPositiveButton("권한 설정하러 가기", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface paramAnonymousDialogInterface, int paramAnonymousInt) {
                                 try {
@@ -132,13 +141,19 @@ public class MainPage extends AppCompatActivity {
                                     finish();
                                 }
                             }
-                        })
-                        .setNegativeButton("취소하기", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface paramAnonymousDialogInterface, int paramAnonymousInt) {
-                            }
-                        })
-                        .create()
-                        .show();
+                        }).setCancelable(false);
+//                        .create()
+//                        .show();
+                AlertDialog alertDialog = localBuilder.create();
+                alertDialog.getWindow().setGravity(Gravity.CENTER);
+                alertDialog.getWindow().getAttributes();
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(alertDialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                alertDialog.show();
+                Window window = alertDialog.getWindow();
+                window.setAttributes(lp);
             }
         }
     }
@@ -149,41 +164,6 @@ public class MainPage extends AppCompatActivity {
             checkLocationSetting();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS_UTIL_LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == GPS_UTIL_LOCATION_PERMISSION_REQUEST_CODE) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (Manifest.permission.ACCESS_FINE_LOCATION.equals(permissions[i])) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        checkLocationSetting();
-                    } else {
-                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-                        builder.setTitle("위치 권한이 꺼져있습니다.");
-                        builder.setMessage("[권한] 설정에서 위치 권한을 허용해야 합니다.");
-                        builder.setPositiveButton("설정으로 가기", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent();
-                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                intent.setData(uri);
-                            }
-                        }).setNegativeButton("종료", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        });
-                        androidx.appcompat.app.AlertDialog alert = builder.create();
-                        alert.show();
-                    }
-                    break;
-                }
-            }
         }
     }
 

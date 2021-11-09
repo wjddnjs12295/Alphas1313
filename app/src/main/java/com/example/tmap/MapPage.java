@@ -2,7 +2,6 @@ package com.example.tmap;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,20 +10,19 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.drawable.GradientDrawable;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,7 +50,6 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.gson.JsonParser;
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapInfo;
 import com.skt.Tmap.TMapMarkerItem;
@@ -76,153 +73,158 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 
 public class MapPage extends AppCompatActivity {
 
+    // 포인트 == 위경도 나타내는 클래스
+    // 아이템 == 지도에 마커를 표시하기 위한 클래스
 
-    private String storeName;
-    private Context mContext = null;
-    private boolean m_bTrackingMode = false;
-    private Button mapback;
-
-    String strID;
-    String locationId;
-    private LinearLayout routeLayout;
-    PermissionManager mPermissionManager = null;
-
-    private TMapData tmapdata = null;
-    private TMapView mMapView = null;
+    //T맵키 작성
     private static final String mApiKey = "l7xxa1a4006f04c0457490f37c791bcf534e";
-    private static int mMarkerID;
-    private static int locationID;
-    private final ArrayList<String> mArrayMarkerID = new ArrayList<String>();
-    private final ArrayList<MapPoint> m_mapPoint = new ArrayList<MapPoint>();
-    private ArrayList<TMapMarkerItem> selectedMarkerItemArray = new ArrayList<>();
-    private final ArrayList<String> mLocationID = new ArrayList<String>();
-    private final ArrayList<MapPoint> locationPoint = new ArrayList<MapPoint>();
+    //POI검색, 경로검색 등의 지도데이터를 관리하는 클래스
+    private TMapData tmapdata = null;
+    //맵의 기능저장
+    private TMapView mMapView = null;
 
-    private String totalDistance = null;
-    private String totalTime = null;
+    private Context mContext = null;
 
-    private TMapPoint centerPoint = null;
-
-    //마커핀 위경도
-    private Double maplat = null;
-    private Double maplon = null;
-
-    //현재위치 트래킹모드 버튼
-    private ImageView locationBtn;
-
-    //총 거리 및 도착예정시간 알림
-    private TextView routeDistance;
-    private TextView routeTime;
-    private TextView mapstorename;
-
+    //맵퍼미션관리
+    PermissionManager mPermissionManager = null;
+    //기기 위치정보 퍼미션관련
+    private static final int GPS_UTIL_LOCATION_PERMISSION_REQUEST_CODE = 100;
+    private static final int GPS_UTIL_LOCATION_RESOLUTION_REQUEST_CODE = 101;
+    public static final int DEFAULT_LOCATION_REQUEST_PRIORITY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
+    public static final long DEFAULT_LOCATION_REQUEST_INTERVAL = 20000L;
+    public static final long DEFAULT_LOCATION_REQUEST_FAST_INTERVAL = 10000L;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationRequest locationRequest;
+    //기기 맵위경도 값 저장
+    private double toplon, toplat;
+    //메인메뉴에서 받아온 위경도값 저장
     private Double latitude = null;
     private Double longitude = null;
 
+
+
+    //뒤로가기버튼
+    private Button mapback;
+
+
+    //티맵 마커 아이디 저장
+    String strID;
+
+    //맵중심 반경2km내 가게ID정보 저장
+    private final ArrayList<String> mArrayMarkerID = new ArrayList<String>();
+    //맵중심 반경2km내 가게포인트 저장
+    private final ArrayList<MapPoint> m_mapPoint = new ArrayList<MapPoint>();
+    //선택된 가게포인트 저장
+    private final ArrayList<MapPoint> selectedPoint = new ArrayList<MapPoint>();
+
+    //총 거리 및 시간 저장
+    private String totalDistance = null;
+    private String totalTime = null;
+    //총 거리 및 도착예정시간 알림
+    private TextView routeDistance;
+    private TextView routeTime;
+
+    //맵 중심포인트 저장
+    private TMapPoint centerPoint = null;
+    //마커핀 위경도 저장
+    private Double maplat = null;
+    private Double maplon = null;
+
+    //가게 클릭시 나오는 가게이미지
+    Bitmap storeimagebitmap;
+    //가게이름 저장
+    private String store_name = null;
+    //가게위도 저장
+    private Double store_lat;
+    //가게경도 저장
+    private Double store_lon;
+    //가게 이미지url저장
+    private String store_url;
+    //가게 아이디저장
+    private String store_id;
+    //가게이미지 저장HashMap
+    private Map<String, String> urlMap;
+    //가게아이디 저장HashMap
+    private Map<String, String> urlMap1;
+    //맵중심 모든 가게정보 저장HashMap
+    private Map<String, String> urlMap2;
+    //서버데이터 배열저장
+    JSONArray jsonArray;
+    JSONObject jsonObject;
+    //Json 가게이름 저장용
+    private String storeName;
+    //가게이미지 뷰
+    private ImageView store_image;
+    //가게 메뉴정보 저장 후 Order페이지에 넣기
+    String result;
+    //가게 가제정보 저장 후 Order페이지에 넣기
+    String result1;
+    //선택된 가게 클릭시 나오는 가게정보 이름저장
+    private TextView mapstorename;
+    //가게 이름 저장
+    private String storename;
+
+
+    //현재위치 이동 버튼
+    private ImageView locationBtn;
+    //내위치로 이동하는 버튼 클릭여부
+    private boolean locationClik = false;
+
+
+
+    //맵에 표시되는 가게아이템
+    private TMapMarkerItem storeItem = new TMapMarkerItem();
+    //내위치 마커이미지저장
+    private Bitmap locationbit = null;
+    //내위치 아이템
+    private TMapMarkerItem locationItem = new TMapMarkerItem();
+    //내위치에서 선택된 가게까지 거리 및 시간계산하기 위해 도착지점 포인트 저장
+    private TMapPoint endPoint = null;
+    private final TMapMarkerItem endItem = new TMapMarkerItem();
+    //맵 중심 위경도 저장 포인트
+    private TMapPoint tpoint = null;
+
+    //선택된 가게 중심 위경도 저장 포인트
+    private TMapPoint selpoint = null;
     //마지막에 눌렸던 선택되어있는 마커 아이디
     private String selectedMarkerID = "";
     private TMapMarkerItem selectedMarkerItem;
     //눌려지는 마커 아이디
     private String willSelectPointID = "";
-
-    private TMapPoint endPoint = null;
-    private TMapMarkerItem tempItem = new TMapMarkerItem();
-
-    private TMapMarkerItem storeItem = new TMapMarkerItem();
-    private Bitmap storebit = null;
-
-    private Bitmap locationbit = null;
-    private TMapMarkerItem locationItem = new TMapMarkerItem();
-
-    private Bitmap startbit = null;
-    private TMapMarkerItem startItem = new TMapMarkerItem();
-
-    private Bitmap endbit = null;
-    private final TMapMarkerItem endItem = new TMapMarkerItem();
-
-    private TMapPoint tpoint = null;
-    private TMapPoint locpoint = null;
-    private String storename;
+    //선택안된 마커아이템 정보
     customView custom;
-    clickcustomView clickcustom;
     Bitmap bi;
+    //선택된 마커아이템 정보
+    clickcustomView clickcustom;
     Bitmap cbi;
-    String ct;
-    Bitmap bitmap;
+    //선택된 마커 중 맵 이동시 남아있는 마커아이템정보
+    clickcustomView clickcustom1;
+    Bitmap cbi1;
 
-    private String store_name = null;
-    private Double store_lat;
-    private Double store_lon;
-    private String store_url;
-    private String store_id;
-    private String urltemp;
-    private Map<String, String> urlMap;
-    private Map<String, String> urlMap1;
-    private Map<String, String> urlMap2;
-    JSONArray jsonArray;
-    int count = 0;
 
-    private ImageView store_image;
-    String[] strings;
-    String[] stringid;
-    int jsoni = 0;
-    private String tempname = null;
-    String result;
-    String result1;
+    //맵페이지 시작시 3초동안 나오는 이미지
+    LinearLayout timeimage;
+    //커스텀 토스트메세지
+    Toast toast = null;
 
-    JSONObject jsonObject;
-    Location location;
-    Location maplocation;
-    MarkerOverlay marker = null;
-
-    private static final int GPS_UTIL_LOCATION_PERMISSION_REQUEST_CODE = 100;
-    private static final int GPS_UTIL_LOCATION_RESOLUTION_REQUEST_CODE = 101;
-
-    public static final int DEFAULT_LOCATION_REQUEST_PRIORITY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
-    public static final long DEFAULT_LOCATION_REQUEST_INTERVAL = 20000L;
-    public static final long DEFAULT_LOCATION_REQUEST_FAST_INTERVAL = 10000L;
-
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private LocationRequest locationRequest;
-    private double toplon, toplat;
-
-    private final LocationListener mLocationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-                mMapView.setLocationPoint(longitude, latitude);
-                mMapView.setCenterPoint(longitude, latitude);
-            }
-
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
+    //줌레벨 터치전 후 비교값
+    int getzoomLevel = 0;
+    int willzoomLevel = 0;
 
     /**
      * 내위치 활성화 버튼
      */
     public void onClickLocationBtn(View v) {
-        m_bTrackingMode = !m_bTrackingMode;
+        locationClik = !locationClik;
         checkLocationPermission();
-        if (m_bTrackingMode) {
-            mMapView.setIconVisibility(m_bTrackingMode);
+        if (locationClik) {
+            mMapView.setIconVisibility(locationClik);
             locationBtn.setBackgroundResource(R.drawable.location_btn);
         }
         locationBtn.setBackgroundResource(R.drawable.location_btn_sel);
@@ -235,16 +237,16 @@ public class MapPage extends AppCompatActivity {
         mMapView.setCenterPoint(toplon, toplat);/**  서버 URL설정   */
         mMapView.removeAllMarkerItem();
         String url = "http://3.34.43.28:5000/api/map/getNearStores";
-//                        Double lat = 35.13914857629859;
-//                        Double lon = 129.06716044028204;
         maplat = mMapView.getCenterPoint().getLatitude();
         maplon = mMapView.getCenterPoint().getLongitude();
         // AsyncTask를 통해 HttpURLConnection 수행.
         m_mapPoint.clear();
         NetworkTask networkTask = new NetworkTask(url, maplat, maplon);
         networkTask.execute();
-
     }
+    /**
+     * 내위치 활성화 버튼
+     */
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -252,6 +254,15 @@ public class MapPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_page);
+        timeimage = findViewById(R.id.timeimage);
+
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                // 시간 지난 후 실행할 코딩
+                timeimage.setVisibility(View.GONE);
+            }
+        }, 1700);
 
         Intent intent = getIntent();
         latitude = intent.getDoubleExtra("latitude", 0);
@@ -264,6 +275,7 @@ public class MapPage extends AppCompatActivity {
         totalDistance = null;
         totalTime = null;
         mContext = this;
+
         mapback = findViewById(R.id.mapback);
 
         mapback.setOnClickListener(new View.OnClickListener() {
@@ -280,8 +292,6 @@ public class MapPage extends AppCompatActivity {
 
         locationBtn = findViewById(R.id.location_btn);
 
-        routeLayout = findViewById(R.id.route_layout);
-
         routeDistance = findViewById(R.id.route_distance);
         routeTime = findViewById(R.id.route_time);
         mapstorename = findViewById(R.id.map_storename);
@@ -292,6 +302,7 @@ public class MapPage extends AppCompatActivity {
         RelativeLayout relativeLayout = findViewById(R.id.mapview);
         RelativeLayout relativeLayout1 = findViewById(R.id.mapui);
         RelativeLayout relativeLayout2 = findViewById(R.id.mapui1);
+
 
         relativeLayout.addView(mMapView);
         relativeLayout1.bringToFront();
@@ -312,8 +323,6 @@ public class MapPage extends AppCompatActivity {
         locationBtn.setBackgroundResource(R.drawable.location_btn_sel);
 
         String url = "http://3.34.43.28:5000/api/map/getNearStores";
-//        Double lat = 35.13914857629859;
-//        Double lon = 129.06716044028204;
         maplat = mMapView.getCenterPoint().getLatitude();
         maplon = mMapView.getCenterPoint().getLongitude();
         // AsyncTask를 통해 HttpURLConnection 수행.
@@ -322,145 +331,155 @@ public class MapPage extends AppCompatActivity {
         networkTask.execute();
 
 
-        TMapPoint tpoint = new TMapPoint(maplat, maplon);
 
         mContext = this;
-        marker = new MarkerOverlay(mContext, "custom", "marker");
-        String strID = "TMapMarkerItem2";
 
-        marker.setPosition(0.2f, 0.2f);
-        marker.getTMapPoint();
-        marker.setID(strID);
-        marker.setIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.dot));
-        marker.setTMapPoint(new TMapPoint(tpoint.getLatitude(), tpoint.getLongitude()));
+        getzoomLevel = mMapView.getZoomLevel();
 
-        mMapView.addMarkerItem2(strID, marker);
 
         /**  맵 클릭시   */
         mMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
             @Override
             public boolean onPressUpEvent(ArrayList<TMapMarkerItem> markerlist, ArrayList<TMapPOIItem> poilist, TMapPoint point, PointF pointf) {
-
                 mMapView.removeAllTMapPolyLine();
                 locationBtn.setBackgroundResource(R.drawable.location_btn);
-
+                willzoomLevel = mMapView.getZoomLevel();
                 /**  서버 URL설정   */
-                if (markerlist.size() != 0) {
-                    willSelectPointID = markerlist.get(0).getID();
-                    if (!selectedMarkerID.equals((markerlist.get(0).getID()))) {
-                        Thread mThread = new Thread() {
-                            @Override
-                            public void run() {
-                                try {
-                                    URL url = new URL(urlMap.get(markerlist.get(0).getID()));
-                                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                    conn.setDoInput(true);
-                                    conn.connect();
-                                    InputStream is = conn.getInputStream();
-                                    bitmap = BitmapFactory.decodeStream(is);
-                                } catch (MalformedURLException e) {
-                                    e.printStackTrace();
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-                        };
-                        mThread.start();
-                        try {
-                            //join -> 쓰레드 종료시까지
-                            mThread.join();
+                if (getzoomLevel == willzoomLevel) {
+                    /** 마커 클릭시  */
+                    if (markerlist.size() != 0 && centerPoint.equals(mMapView.getCenterPoint())) {
+                        willSelectPointID = markerlist.get(0).getID();
 
-                            store_image.setImageBitmap(bitmap);
-                            mapstorename.setText(markerlist.get(0).getName());
-                            clickcustom = new clickcustomView(MapPage.this, markerlist.get(0).getName());
-                            relativeLayout1.setVisibility(View.VISIBLE);
-
-                            TMapPoint point4 = markerlist.get(0).getTMapPoint();
-                            endPoint = point4;
-
-                            View cv = clickcustom.getView();
-                            cbi = createBitmapFromLayout(cv);
-                            locationBtn.setBackgroundResource(R.drawable.location_btn);
-//                            mMapView.setCenterPoint(point4.getLongitude(), point4.getLatitude());
-                            drawPedestrianPath();
-                            showSelectedMarker(markerlist.get(0), willSelectPointID, selectedMarkerID);
-                            selectedMarkerItem = markerlist.get(0);
-
-                            relativeLayout1.setOnClickListener(new View.OnClickListener() {
-
+                        if (!selectedMarkerID.equals((markerlist.get(0).getID()))) {
+                            Thread mThread = new Thread() {
                                 @Override
-                                public void onClick(View view) {
-
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                URL url = new URL("http://3.34.43.28:5000/api/store/menus/" + urlMap1.get(markerlist.get(0).getID()));
-                                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                                                connection.setRequestMethod("GET");
-                                                connection.setDoInput(true); //데이터를 읽어올지 설정
-                                                InputStream is = connection.getInputStream();
-                                                StringBuilder sb = new StringBuilder();
-                                                BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                                                result = null;
-                                                while ((result = br.readLine()) != null) {
-                                                    sb.append(result + "\n");
-                                                }
-                                                result = sb.toString();
-
-                                                result1 = urlMap2.get(markerlist.get(0).getID());
-                                                Intent intent = new Intent(MapPage.this, OrderPage.class);
-                                                intent.putExtra("menus", result);
-                                                intent.putExtra("store", result1);
-                                                startActivity(intent);
-                                            } catch (MalformedURLException e) {
-                                                e.printStackTrace();
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }.start();
+                                public void run() {
+                                    try {
+                                        URL url = new URL(urlMap.get(markerlist.get(0).getID()));
+                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                        conn.setDoInput(true);
+                                        conn.connect();
+                                        InputStream is = conn.getInputStream();
+                                        storeimagebitmap = BitmapFactory.decodeStream(is);
+                                    } catch (MalformedURLException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                    }
                                 }
-                            });
+                            };
+                            mThread.start();
+                            try {
+                                //join -> 쓰레드 종료시까지
+                                mThread.join();
+                                store_image.setImageBitmap(storeimagebitmap);
+                                mapstorename.setText(markerlist.get(0).getName());
+                                clickcustom = new clickcustomView(MapPage.this, markerlist.get(0).getName());
+                                relativeLayout1.setVisibility(View.VISIBLE);
 
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                                TMapPoint point4 = markerlist.get(0).getTMapPoint();
+                                endPoint = point4;
+
+                                View cv = clickcustom.getView();
+                                cbi = createBitmapFromLayout(cv);
+                                locationBtn.setBackgroundResource(R.drawable.location_btn);
+                                drawPedestrianPath();
+
+                                selectedMarkerItem = markerlist.get(0);
+                                showSelectedMarker(markerlist.get(0), willSelectPointID, selectedMarkerID);//, willSelectPointID, selectedMarkerID);
+
+                                relativeLayout1.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        new Thread() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    URL url = new URL("http://3.34.43.28:5000/api/store/menus/" + urlMap1.get(selectedMarkerID));
+                                                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                                    connection.setRequestMethod("GET");
+                                                    connection.setDoInput(true); //데이터를 읽어올지 설정
+                                                    InputStream is = connection.getInputStream();
+                                                    StringBuilder sb = new StringBuilder();
+                                                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                                                    result = null;
+                                                    while ((result = br.readLine()) != null) {
+                                                        sb.append(result + "\n");
+                                                    }
+                                                    result = sb.toString();
+                                                    result1 = urlMap2.get(selectedMarkerID);
+                                                    Intent intent = new Intent(MapPage.this, OrderPage.class);
+                                                    intent.putExtra("menus", result);
+                                                    intent.putExtra("store", result1);
+                                                    startActivity(intent);
+                                                } catch (MalformedURLException e) {
+                                                    e.printStackTrace();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }.start();
+                                    }
+                                });
+
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    } else {
-
                     }
-                } else {
+                    /** 마커 클릭시  */
+                    else {
 
-                    if (!centerPoint.equals(mMapView.getCenterPoint())) {
-                        if (clickcustom != null) {
-                            relativeLayout1.setVisibility(View.VISIBLE);
-                        }else {
-                            /**  서버 URL설정   */
-                            mMapView.removeAllMarkerItem();
-                            String url = "http://3.34.43.28:5000/api/map/getNearStores";
-//                        Double lat = 35.13914857629859;
-//                        Double lon = 129.06716044028204;
-                            maplat = mMapView.getCenterPoint().getLatitude();
-                            maplon = mMapView.getCenterPoint().getLongitude();
-                            // AsyncTask를 통해 HttpURLConnection 수행.
-                            m_mapPoint.clear();
-                            NetworkTask networkTask = new NetworkTask(url, maplat, maplon);
-                            networkTask.execute();
-                        }
-                    } else {
-                        if (selectedMarkerItem != null) {
-                            relativeLayout1.setVisibility(View.GONE);
-                            //여기
-                            custom = new customView(MapPage.this, selectedMarkerItem.getName());
-                            View v = custom.getView();
-                            bi = createBitmapFromLayout(v);
-                            selectedMarkerItem.setIcon(bi);
-                            selectedMarkerID = "";
-                            clickcustom = null;
+                        if (!centerPoint.equals(mMapView.getCenterPoint())) {
+                            if (clickcustom != null) {
+                                relativeLayout1.setVisibility(View.VISIBLE);
+                                mMapView.removeAllMarkerItem();
+                                m_mapPoint.clear();
+                                String url = "http://3.34.43.28:5000/api/map/getNearStores";
+                                maplat = mMapView.getCenterPoint().getLatitude();
+                                maplon = mMapView.getCenterPoint().getLongitude();
+                                // AsyncTask를 통해 HttpURLConnection 수행.
+                                NetworkTask networkTask = new NetworkTask(url, maplat, maplon);
+                                networkTask.execute();
+                            } else {
+                                /**  서버 URL설정   */
+                                mMapView.removeAllMarkerItem();
+                                m_mapPoint.clear();
+                                String url = "http://3.34.43.28:5000/api/map/getNearStores";
+                                maplat = mMapView.getCenterPoint().getLatitude();
+                                maplon = mMapView.getCenterPoint().getLongitude();
+                                // AsyncTask를 통해 HttpURLConnection 수행.
+                                NetworkTask networkTask = new NetworkTask(url, maplat, maplon);
+                                networkTask.execute();
+
+                            }
+                        } else {
+                            if (selectedMarkerItem != null) {
+                                selectedPoint.clear();
+                                mMapView.removeMarkerItem(selectedMarkerItem.getID());
+                                relativeLayout1.setVisibility(View.GONE);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    if (selectedMarkerItem.getName().equals(m_mapPoint.get(i).getName())) {
+                                        showSelectedMarkerPoint(0);
+                                        break;
+                                    } else {
+                                        mMapView.removeMarkerItem(selectedMarkerItem.getID());
+                                    }
+                                }
+                                //여기
+                                custom = new customView(MapPage.this, selectedMarkerItem.getName());
+                                View v = custom.getView();
+                                bi = createBitmapFromLayout(v);
+                                selectedMarkerItem.setIcon(bi);
+                                selectedMarkerID = "";
+                                clickcustom = null;
+                                selectedMarkerItem = null;
+                            }
                         }
                     }
                 }
-
                 return false;
             }
 
@@ -468,24 +487,34 @@ public class MapPage extends AppCompatActivity {
             @Override
             public boolean onPressEvent(ArrayList<TMapMarkerItem> markerlist, ArrayList<TMapPOIItem> poilist, TMapPoint point, PointF pointf) {
                 centerPoint = mMapView.getCenterPoint();
+                getzoomLevel = mMapView.getZoomLevel();
                 return false;
             }
         });
         /**  맵 클릭시   */
-
         mMapView.setHttpsMode(true);
-
     }
+
+    /**
+     * 뒤로가기 이벤트
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(MapPage.this, MainPage.class); //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);    //인텐트 플래그 설정
+        startActivity(intent);  //인텐트 이동
+        finish();
+    }
+
+    /**
+     * 뒤로가기 이벤트
+     */
 
     @Override
     protected void onStart() {
         super.onStart();
         checkLocationPermission();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     private void checkLocationPermission() {
@@ -506,7 +535,7 @@ public class MapPage extends AppCompatActivity {
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                         checkLocationSetting();
                     } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog);
                         builder.setTitle("위치 권한이 꺼져있습니다.");
                         builder.setMessage("[권한] 설정에서 위치 권한을 허용해야 합니다.");
                         builder.setPositiveButton("설정으로 가기", new DialogInterface.OnClickListener() {
@@ -525,6 +554,7 @@ public class MapPage extends AppCompatActivity {
                             }
                         });
                         AlertDialog alert = builder.create();
+                        alert.getWindow().setGravity(Gravity.CENTER);
                         alert.show();
                     }
                     break;
@@ -595,11 +625,6 @@ public class MapPage extends AppCompatActivity {
         }
     };
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     /**
      * 서버데이터
      */
@@ -621,7 +646,6 @@ public class MapPage extends AppCompatActivity {
             String result; // 요청 결과를 저장할 변수.
             RequestHttpConnection requestHttpURLConnection = new RequestHttpConnection();
             result = requestHttpURLConnection.request(NTurl, NTlat, NTlon); // 해당 URL로 부터 결과물을 얻어온다.
-            Log.d("결과확인", result);
             return result;
         }
 
@@ -639,6 +663,29 @@ public class MapPage extends AppCompatActivity {
 
             try {
                 jsonArray = new JSONArray(jsonStr);
+
+                /**
+                 * 근처 가게 없을때 나오는 토스트 메세지
+                 */
+                if (jsonArray.length() == 0) {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View toastDesign = inflater.inflate(R.layout.map_dialog, (ViewGroup) findViewById(R.id.toastbox)); //toast_design.xml 파일의 toast_design_root 속성을 로드
+
+                    if (toast != null) {
+                        toast.cancel();
+                    }
+                    toast = new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.setView(toastDesign);
+                    toastDesign.setMinimumHeight(70);
+                    toastDesign.setMinimumWidth(580);
+                    toast.show();
+                }
+                /**
+                 * 근처 가게 없을때 나오는 토스트 메세지
+                 */
+
                 for (int i = 0; i < jsonArray.length(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
                     store_name = jsonObject.getString("store_name");
@@ -649,14 +696,10 @@ public class MapPage extends AppCompatActivity {
                     Log.d("루트확인", "" + jsonObject);
 
 
-                    strings = new String[jsonArray.length()];
-                    stringid = new String[jsonArray.length()];
-                    strings[i] = store_url;
-                    count++;
-                    addPoint();
+//                    addPoint();
                     showMarkerPoint(i);
                 }
-
+                showSelectedMarkerPoint(0);
                 Log.d("json", "" + stringBuilder);
 
                 return storeName;
@@ -666,7 +709,9 @@ public class MapPage extends AppCompatActivity {
             }
         }
     }
-    /**   서버데이터   */
+    /**
+     * 서버데이터
+     */
 
 
     /**
@@ -687,39 +732,42 @@ public class MapPage extends AppCompatActivity {
 
 
     /**
-     * 핀 데이터
-     */
-    public void addPoint() {
-        m_mapPoint.add(new MapPoint(store_name, store_lat, store_lon));
-        Log.d("뤁확인", "" + m_mapPoint);
-    }
-    /**   핀 데이터  */
-
-    /**
-     * 핀 그리기
+     * 선택된 마커처리
      */
 
-    public void showSelectedMarker(TMapMarkerItem item, String willSelectID, String selectedID) {
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    public void showSelectedMarker(TMapMarkerItem item, String willSelectPointID, String selectedID) {
         storeItem = new TMapMarkerItem();
-        Log.d("클릭마커뷰", "123123" + selectedID);
         if (selectedID != "") {
-            Log.d("클릭마커뷰", "13123");
             View v = new customView(this, mMapView.getMarkerItemFromID(selectedID).getName()).getView();
             bi = createBitmapFromLayout(v);
             mMapView.getMarkerItemFromID(selectedID).setIcon(bi);
         }
         item.setIcon(cbi);
         selectedMarkerID = willSelectPointID;
-
     }
 
+    /**
+     * 선택된 마커처리
+     */
+
+//    /**
+//     * 핀 데이터
+//     */
+
+//    public void addPoint() {
+//        m_mapPoint.add(new MapPoint(store_name, store_lat, store_lon));
+//        Log.d("뤁확인", "" + store_name);
+//    }
+//    /**   핀 데이터  */
 
     /**
      * 핀 생성
      */
-    // 마커(핀) 찍는함수
     @RequiresApi(api = Build.VERSION_CODES.R)
     public void showMarkerPoint(int index) {
+        m_mapPoint.add(new MapPoint(store_name, store_lat, store_lon));
+
         tpoint = new TMapPoint(m_mapPoint.get(index).getLatitude(),
                 m_mapPoint.get(index).getLongitude());
 
@@ -736,8 +784,7 @@ public class MapPage extends AppCompatActivity {
         storeItem = new TMapMarkerItem();
         locationItem = new TMapMarkerItem();
 
-        strID = String.format("pmarker%d", mMarkerID++);
-        Log.d("아이디확인용", strID);
+        strID = store_id;
 
         storeItem.setTMapPoint(tpoint);
         storeItem.setName(m_mapPoint.get(index).getName());
@@ -747,13 +794,45 @@ public class MapPage extends AppCompatActivity {
         storeItem.setCalloutTitle(m_mapPoint.get(index).getName());
         mMapView.addMarkerItem(strID, storeItem);
         mArrayMarkerID.add(strID);
-        Log.d("11111", "" + store_url);
         urlMap.put(strID, store_url);
         urlMap1.put(strID, store_id);
         urlMap2.put(strID, jsonObject.toString());
-
     }
-    /**   핀 생성 */
+    /**
+     * 핀 생성
+     */
+
+
+    /**
+     * 선택된 핀 생성
+     */
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    public void showSelectedMarkerPoint(int index) {
+        if (selectedMarkerItem != null) {
+            selectedPoint.clear();
+            String sename = selectedMarkerItem.getName();
+            Double selat = selectedMarkerItem.latitude;
+            Double selon = selectedMarkerItem.longitude;
+            selectedPoint.add(new MapPoint(sename, selat, selon));
+            selpoint = new TMapPoint(selectedPoint.get(0).getLatitude(),
+                    selectedPoint.get(0).getLongitude());
+            clickcustom1 = new clickcustomView(this, sename);
+            View cv = clickcustom1.getView();
+            String ct = (String) ((TextView) cv.findViewById(R.id.bubble_title)).getText();
+            cbi1 = createBitmapFromLayout(cv);
+
+            selectedMarkerItem.setTMapPoint(selpoint);
+            selectedMarkerItem.setName(selectedPoint.get(0).getName());
+            selectedMarkerItem.setVisible(TMapMarkerItem.VISIBLE);
+            selectedMarkerItem.setIcon(cbi1);
+            selectedMarkerItem.setCalloutTitle(selectedPoint.get(0).getName());
+            mMapView.addMarkerItem(selectedMarkerID, selectedMarkerItem);
+            mMapView.bringMarkerToFront(selectedMarkerItem);
+        }
+    }
+    /**
+     * 선택된 핀 생성
+     */
 
 
     /**
@@ -789,7 +868,6 @@ public class MapPage extends AppCompatActivity {
 //        TMapPoint point1 = mMapView.getCenterPoint();
 
         TMapPoint point1 = new TMapPoint(latitude, longitude);
-        Log.d("88888888888888888888888888888888888888", "" + endPoint);
         TMapPoint point2 = endPoint;
         TMapData tmapdata = new TMapData();
 
@@ -797,8 +875,6 @@ public class MapPage extends AppCompatActivity {
             @Override
             public void onFindPathDataAll(Document doc) {
                 TMapPolyLine polyline = new TMapPolyLine();
-                polyline.setLineColor(Color.rgb(138, 43, 226));
-                polyline.setLineWidth(20);
                 if (doc != null) {
                     NodeList list = doc.getElementsByTagName("Document");
                     Element storeinfo = (Element) list.item(0);
@@ -852,21 +928,12 @@ public class MapPage extends AppCompatActivity {
                         String km1 = String.format("%.1f", km);
                         routeDistance.setText(km1 + "km");
                     }
-                    routeTime.setText("" + time);
-
-
-                    startItem = new TMapMarkerItem();
-                    startItem.setTMapPoint(point1);
-                    startItem.setVisible(TMapMarkerItem.VISIBLE);
-                    startItem.setIcon(startbit);
+                    routeTime.setText(time);
 
                     endItem.setTMapPoint(point2);
                     endItem.setVisible(TMapMarkerItem.VISIBLE);
                     endItem.setIcon(cbi);
-                    tempItem.setTMapPoint(point2);
-                    mMapView.addMarkerItem(strID, endItem);
                 }
-                mMapView.removeAllTMapPolyLine();
             }
         });
     }

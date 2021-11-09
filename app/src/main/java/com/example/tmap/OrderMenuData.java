@@ -10,6 +10,8 @@ public class OrderMenuData implements Serializable {
     private String price;
     private String menuid;
     private String option;
+    private String categoryid;
+    private boolean showtitle;
 
     public String getName() {
         return name;
@@ -43,13 +45,28 @@ public class OrderMenuData implements Serializable {
         this.menuid = menuid;
     }
 
+    public String getCategoryidid() {
+        return categoryid;
+    }
+
+    public void setCategoryid(String categoryid) {
+        this.categoryid = categoryid;
+    }
+
     public String getOption() {
         return option;
     }
 
     public void setOption(String option) {
         this.option = option;
+    }
 
+    public boolean getshowTitle() {
+        return showtitle;
+    }
+
+    public void setShowtitle(boolean showtitle) {
+        this.showtitle = showtitle;
     }
 
 }

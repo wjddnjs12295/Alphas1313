@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
+
+    <RelativeLayout
+        android:id="@+id/up"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/signupback"
+            android:layout_width="50dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/pre"></ImageView>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/storename1"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:fontFamily="@font/nanumsquare_b"
+            android:gravity="center"
+            android:text="회원가입"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="bold"></TextView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/up"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/nanumsquare_eb"
+            android:gravity="center"
+            android:text="회원가입 약관 동의"
+            android:textColor="@color/black"
+            android:textSize="24dp"></TextView>
+
+        <View
+            android:layout_width="21dp"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="22dp"
+            android:background="@color/menured"></View>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="75dp"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/allchecklayout"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/allcheck"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="@drawable/custom_checkbox"
+                android:button="@null"></CheckBox>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:text="(필수) 이용약관 동의"
+                android:textColor="@color/black"></TextView>
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="7dp"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:layout_marginLeft="24dp"
+                android:layout_weight="1">
+
+                <CheckBox
+                    android:id="@+id/sign1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_checkbox"
+                    android:button="@null"></CheckBox>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="(필수) 이용약관 동의"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/signcontent1"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="7dp"
+                    android:layout_height="14sp"
+                    android:src="@drawable/signup_next"></ImageView>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:layout_marginLeft="24dp"
+                android:layout_weight="1">
+
+                <CheckBox
+                    android:id="@+id/sign2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_checkbox"
+                    android:button="@null"></CheckBox>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="(필수) 개인정보 취급방침 동의"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/signcontent2"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="7dp"
+                    android:layout_height="14sp"
+                    android:src="@drawable/signup_next"></ImageView>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:layout_marginLeft="24dp"
+                android:layout_weight="1">
+
+                <CheckBox
+                    android:id="@+id/sign3"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_checkbox"
+                    android:button="@null"></CheckBox>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="(필수) 위치기반서비스 이용 동의"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/signcontent3"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="7dp"
+                    android:layout_height="14sp"
+                    android:src="@drawable/signup_next"></ImageView>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:layout_marginLeft="24dp"
+                android:layout_weight="1">
+
+                <CheckBox
+                    android:id="@+id/sign4"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_checkbox"
+                    android:button="@null"></CheckBox>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:fontFamily="@font/nanumsquare_r"
+                    android:text="(선택) 마케팅 정보 수신 동의"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/signcontent4"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="7dp"
+                    android:layout_height="14sp"
+                    android:src="@drawable/signup_next"></ImageView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/signupNext1"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/round_button1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/nanumsquare_b"
+            android:gravity="center"
+            android:text="다음"
+            android:textColor="@color/white"
+            android:textSize="16dp"></TextView>
+    </RelativeLayout>
+</RelativeLayout>

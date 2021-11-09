@@ -34,57 +34,87 @@ public class EssentialAdapter extends RecyclerView.Adapter<EssentialAdapter.MyVi
     private List<EssentialData> mDataset;
     Bitmap bitmap;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView ETitle;
-        public TextView EPrice;
-        public ImageView check01;
-        public LinearLayout essentiallayout;
-
-        public MyViewHolder(View v){
-            super(v);
-            ETitle = v.findViewById(R.id.etitle);
-            EPrice = v.findViewById(R.id.eprice);
-            check01 = v.findViewById(R.id.check01);
-            essentiallayout = v.findViewById(R.id.essentiallayout);
-        }
+    public interface OnItemClickEventListener {
+        void onItemClick(View a_view, int a_position);
     }
 
+    private OnItemClickEventListener mItemClickListener;
 
     public EssentialAdapter(List<EssentialData> myDataset, Context context) {
         mDataset = myDataset;
         Fresco.initialize(context);
     }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView ETitle;
+        public TextView EPrice;
+        public ImageView check01;
+        public LinearLayout essentiallayout;
+        private boolean Click = false;
+
+
+        public MyViewHolder(View v, OnItemClickEventListener onItemClickEventListener) {
+            super(v);
+            ETitle = v.findViewById(R.id.etitle);
+            EPrice = v.findViewById(R.id.eprice);
+            check01 = v.findViewById(R.id.check01);
+            essentiallayout = v.findViewById(R.id.essentiallayout);
+//            v.setOnClickListener(view -> {
+//                final int position = getAdapterPosition();
+//                if (position != RecyclerView.NO_POSITION) {
+//                    onItemClickEventListener.onItemClick(view, position);
+//                    Click = !Click;
+//                    if (Click) {
+//                        check01.setImageResource(R.mipmap.check);
+//                    } else {
+//                        check01.setImageResource(R.mipmap.nonecheck);
+//                    }
+//                }
+//            });
+        }
+    }
+
+
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.essential_layout, parent, false);
-
-        MyViewHolder vh = new MyViewHolder(v);
+        MyViewHolder vh = new MyViewHolder(v, mItemClickListener);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         EssentialData Eoption = mDataset.get(position);
+        final boolean[] Click = {false};
 
         String price;
         price = Eoption.getEPrice();
         price = price.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
 
         holder.ETitle.setText(Eoption.getETitle());
-        holder.EPrice.setText("+"+price+"원");
+        holder.EPrice.setText("+" + price + "원");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("클릭","클릭"+Eoption.getETitle());
+                Click[0] = !Click[0];
+                if (Click[0]) {
+                    holder.check01.setImageResource(R.mipmap.check);
+                } else {
+                    holder.check01.setImageResource(R.mipmap.nonecheck);
+                }
             }
         });
     }
 
     @Override
     public int getItemCount() {
-
         //삼항 연상자
         return mDataset == null ? 0 : mDataset.size();
     }
+
+    public void setOnItemClickListener(OnItemClickEventListener a_listener) {
+        mItemClickListener = a_listener;
+    }
+
 }

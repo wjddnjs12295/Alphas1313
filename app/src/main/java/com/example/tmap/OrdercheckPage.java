@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -45,9 +46,16 @@ import java.util.List;
 
 public class OrdercheckPage extends AppCompatActivity {
 
-    private Button backbtn;
+    private LinearLayout backbtn;
     private TextView name;
     private TextView price;
+    private TextView totalprice;
+    private String essprice;
+    private String sleprice;
+    private Integer intorginalprice;
+    private Integer intessprice;
+    private Integer intselprice;
+    private Integer total;
     private ImageView image;
     private Bitmap bitmap;
     private RecyclerView eRecycleView;
@@ -58,6 +66,7 @@ public class OrdercheckPage extends AppCompatActivity {
     private RecyclerView.LayoutManager sLayoutManager;
     RequestQueue queue;
     private JSONArray JSONArray = null;
+    private boolean Click = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,7 +75,8 @@ public class OrdercheckPage extends AppCompatActivity {
         name = findViewById(R.id.itemname);
         price = findViewById(R.id.itemprice);
         image = findViewById(R.id.itemimage);
-        backbtn = findViewById(R.id.backbtn);
+        backbtn = findViewById(R.id.checkback);
+        totalprice = findViewById(R.id.totalprice);
 
         eRecycleView = findViewById(R.id.essential);
         eRecycleView.setHasFixedSize(true);
@@ -121,12 +131,13 @@ public class OrdercheckPage extends AppCompatActivity {
                     Log.d("필수"+index, "" + eachOption);
                     etData.setETitle(eachOption.getString("option_name"));
                     etData.setEPrice(eachOption.getString("option_price"));
+                    Log.d("s","1231231");
                     essentialData.add(etData);
                 }
                 if (a == "false"){
                     Log.d("선택"+index,""+eachOption);
-                    stData.setETitle(eachOption.getString("option_name"));
-                    stData.setEPrice(eachOption.getString("option_price"));
+                    stData.setSTitle(eachOption.getString("option_name"));
+                    stData.setSPrice(eachOption.getString("option_price"));
                     selectionData.add(stData);
                 }
             } catch (JSONException e) {
@@ -137,6 +148,51 @@ public class OrdercheckPage extends AppCompatActivity {
         eRecycleView.setAdapter(eAdapter);
         sAdapter = new SelectionAdapter(selectionData, OrdercheckPage.this);
         sRecycleView.setAdapter(sAdapter);
+
+//        EssentialAdapter essentialAdapter = new EssentialAdapter(essentialData, OrdercheckPage.this);
+//        eRecycleView.setAdapter(essentialAdapter);
+//        SelectionAdapter selectionAdapter = new SelectionAdapter(selectionData, OrdercheckPage.this);
+//        sRecycleView.setAdapter(selectionAdapter);
+
+        intorginalprice = Integer.parseInt(menus1);
+        totalprice.setText(menus1);
+        total = intorginalprice;
+
+//        essentialAdapter.setOnItemClickListener(new EssentialAdapter.OnItemClickEventListener() {
+//            @Override
+//            public void onItemClick(View a_view, int a_position) {
+//                Click = !Click;
+//                if (Click) {
+//                    Log.d("클릭", "" + essentialData.get(a_position).getEPrice());
+//                    essprice = essentialData.get(a_position).getEPrice();
+//                    intessprice = Integer.parseInt(essprice);
+//                        total += intessprice;
+//                        totalprice.setText(total.toString());
+//                }
+//            }
+//        });
+//        selectionAdapter.setOnItemClickListener(new SelectionAdapter.OnItemClickEventListener() {
+//            @Override
+//            public void onItemClick(View b_view, int a_position) {
+//                Click = !Click;
+//                if (Click) {
+//                    Log.d("클릭", "" + selectionData.get(a_position).getSPrice());
+//                    sleprice = selectionData.get(a_position).getSPrice();
+//                    intselprice = Integer.parseInt(sleprice);
+//                    total += intselprice;
+//                    String a = String.format("%,d", total);
+//                    totalprice.setText(a);
+//                }
+//                else {
+//                    sleprice = selectionData.get(a_position).getSPrice();
+//                    intselprice = Integer.parseInt(sleprice);
+//                    total -= intselprice;
+//                    String a = String.format("%,d", total);
+//                    totalprice.setText(a);
+//                }
+//            }
+//        });
+
 
 
         name.setText(menus);
@@ -165,14 +221,13 @@ public class OrdercheckPage extends AppCompatActivity {
         try {
             //join -> 쓰레드 종료시까지
             mThread.join();
-
             image.setImageBitmap(bitmap);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-
+        backbtn.bringToFront();
         backbtn.setOnClickListener(new View.OnClickListener() {
 
             @Override

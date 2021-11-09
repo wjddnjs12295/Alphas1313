@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +24,7 @@ public class StoreinfoPage extends AppCompatActivity {
     private TextView ceoname = null;
     private TextView origin_info = null;
     private TextView name1 = null;
-    private Button backbtn;
+    private LinearLayout backbtn;
 
 
     @Override
@@ -32,6 +33,7 @@ public class StoreinfoPage extends AppCompatActivity {
         setContentView(R.layout.storeinfo_page);
 
         backbtn = findViewById(R.id.infoback);
+        backbtn.bringToFront();
 
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override

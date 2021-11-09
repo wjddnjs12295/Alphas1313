@@ -1,13 +1,20 @@
 package com.example.tmap;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -15,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,16 +55,18 @@ public class OrderPage extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private RecyclerView menuRecycleView;
+    private RecyclerView menuRecycleView1;
     private RecyclerView.Adapter menuAdapter;
     private RecyclerView.Adapter menuAdapter1;
     private RecyclerView.LayoutManager menuLayoutManager;
+    private RecyclerView.LayoutManager menuLayoutManager1;
 
     private View menuLayout;
     private LinearLayout cell;
 
     RequestQueue queue;
 
-    private Button backbtn;
+    private LinearLayout backbtn;
     private Button storeinfobtn;
     private LinearLayout orderbox;
     private StickyScrollView scrollView;
@@ -77,7 +87,7 @@ public class OrderPage extends AppCompatActivity {
     private String categoryitem = null;
     private String categoryitem1[];
     private String option = null;
-
+    private String Mcategoryid = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,8 +105,15 @@ public class OrderPage extends AppCompatActivity {
         menuRecycleView.setHasFixedSize(true);
         menuLayoutManager = new LinearLayoutManager(this);
         menuRecycleView.setLayoutManager(menuLayoutManager);
-        backbtn = findViewById(R.id.backbtn);
-        orderbox= findViewById(R.id.OrderBox);
+
+        menuRecycleView1 = findViewById(R.id.menutitle1);
+        menuRecycleView1.setHasFixedSize(true);
+        menuLayoutManager1 = new LinearLayoutManager(this);
+        menuRecycleView1.setLayoutManager(menuLayoutManager1);
+
+
+        backbtn = findViewById(R.id.orderback);
+        orderbox = findViewById(R.id.OrderBox);
 
         orderbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +122,7 @@ public class OrderPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        backbtn.bringToFront();
 
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +140,7 @@ public class OrderPage extends AppCompatActivity {
         JSONObject jsonObject1 = null;
         try {
             jsonObject1 = new JSONObject(store);
-            Log.d("스토어",jsonObject1.toString());
+            Log.d("스토어", jsonObject1.toString());
             store_id = jsonObject1.getString("_id");
             store_name = jsonObject1.getString("store_name");
             store_tel = jsonObject1.getString("store_tel");
@@ -180,6 +198,45 @@ public class OrderPage extends AppCompatActivity {
         storetel.setText(store_tel);
         storeaddress.setText(store_address);
 
+        storetel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder oDialog = new AlertDialog.Builder(OrderPage.this,
+                        android.R.style.Theme_DeviceDefault_Light_Dialog);
+                oDialog.setMessage(store_tel+"로 전화를 거시겠습니까?")
+                        .setTitle("전화걸기")
+                        .setPositiveButton("아니오", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                Log.i("Dialog", "취소");
+                            }
+                        })
+                        .setNeutralButton("예", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:"+store_tel));
+                                startActivity(myIntent);
+                            }
+                        });
+//                        .setCancelable(false) // 백버튼으로 팝업창이 닫히지 않도록 한다.
+//                        .show();
+                AlertDialog alertDialog = oDialog.create();
+                alertDialog.getWindow().setGravity(Gravity.CENTER);
+                alertDialog.getWindow().getAttributes();
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(alertDialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                alertDialog.show();
+                Window window = alertDialog.getWindow();
+                window.setAttributes(lp);
+
+            }
+        });
+
 
         Thread mThread = new Thread() {
             @Override
@@ -220,72 +277,56 @@ public class OrderPage extends AppCompatActivity {
 
             JSONArray arrayCategory = jsonObject.getJSONArray("store_categories");
             List<OrderTitleData> categoryData = new ArrayList<>();
+            List<OrderTitleData1> categoryData1 = new ArrayList<>();
+            List<OrderMenuData> menuData = new ArrayList<>();
+
             for (int i = 0, j = arrayCategory.length(); i < j; i++) {
                 JSONObject categoriesobj = arrayCategory.getJSONObject(i);
 
                 OrderTitleData orderTitleData = new OrderTitleData();
                 orderTitleData.setTitle(categoriesobj.getString("category_name"));
+                OrderTitleData1 orderTitleData1 = new OrderTitleData1();
+                orderTitleData1.setCategory(categoriesobj.getString("category_name"));
                 categoryitem = categoriesobj.getString("category_name");
                 categoryitem1 = new String[arrayCategory.length()];
                 categoryitem1[i] = categoryitem;
+                Mcategoryid = categoriesobj.getString("_id");
                 categoryData.add(orderTitleData);
+                JSONArray arraymenu = jsonObject.getJSONArray("store_menus");
+                JSONArray arrayoption = jsonObject.getJSONArray("store_options");
+                for (int q = 0, w = arraymenu.length(); q < w; q++) {
+                    JSONObject menuobj = arraymenu.getJSONObject(q);
+                    OrderMenuData orderMenuData = new OrderMenuData();
+                    String menuid = menuobj.getString("_id");
+                    String categoryid = menuobj.getString("category_id");
+                    for (int a = 0, b = arrayoption.length(); a < b; a++) {
+                        JSONObject optionobj = arrayoption.getJSONObject(a);
+                        String optionid = optionobj.getString("menu_id");
+                        if (menuid.equals(optionid)) {
+                            orderMenuData.setOption(arrayoption.toString());
+                        }
+                    }
+                    if (Mcategoryid.equals(categoryid)) {
+                        orderMenuData.setCategoryid(categoriesobj.getString("category_name"));
+                        orderMenuData.setName(menuobj.getString("menu_name"));
+                        orderMenuData.setPrice(menuobj.getString("menu_price"));
+                        orderMenuData.setUrlToImage(menuobj.getString("menu_thumb_url"));
+                        categoryData1.add(orderTitleData1);
+                        menuData.add(orderMenuData);
+                    }
+                }
             }
             mAdapter = new CategoryAdapter(categoryData, OrderPage.this);
             mRecycleView.setAdapter(mAdapter);
 
-
-            List<OrderMenuData> menuData = new ArrayList<>();
-//
-//            JSONArray arrayoption = jsonObject.getJSONArray("store_options");
-//            Log.d("무야호 : ", ""+arrayoption);
-//            for (int i = 0, j = arrayoption.length(); i < j; i++) {
-//                JSONObject optionobj = arrayoption.getJSONObject(i);
-//                OrderMenuData orderMenuData = new OrderMenuData();
-//                Log.d("옵션!",optionobj.toString());
-//                option = optionobj.toString();
-//            }
-//
-//            JSONArray arraymenu = jsonObject.getJSONArray("store_menus");
-//
-//            for (int i = 0, j = arraymenu.length(); i < j; i++) {
-//                JSONObject menuobj = arraymenu.getJSONObject(i);
-//                Log.d("메뉴!!", menuobj.toString());
-//                OrderMenuData orderMenuData = new OrderMenuData();
-//                orderMenuData.setName(menuobj.getString("menu_name"));
-//                orderMenuData.setPrice(menuobj.getString("menu_price"));
-//                orderMenuData.setUrlToImage(menuobj.getString("menu_thumb_url"));
-////                orderMenuData.setOption(option);
-//                orderMenuData.setMenuid(store_id);
-//
-//                menuData.add(orderMenuData);
-//            }
-//
-//            menuAdapter = new MenuAdapter(menuData, OrderPage.this);
-//            menuRecycleView.setAdapter(menuAdapter);
-
-            JSONArray arraymenu = jsonObject.getJSONArray("store_menus");
-            JSONArray arrayoption = jsonObject.getJSONArray("store_options");
-            for (int i = 0, j = arraymenu.length(); i < j; i++) {
-                JSONObject menuobj = arraymenu.getJSONObject(i);
-                OrderMenuData orderMenuData = new OrderMenuData();
-                orderMenuData.setName(menuobj.getString("menu_name"));
-                orderMenuData.setPrice(menuobj.getString("menu_price"));
-                orderMenuData.setUrlToImage(menuobj.getString("menu_thumb_url"));
-                String menuid = menuobj.getString("_id");
-                String categoryid = menuobj.getString("category_id");
-                for (int a = 0, b = arrayoption.length(); a < b; a++) {
-                    JSONObject optionobj = arrayoption.getJSONObject(a);
-                    String optionid = optionobj.getString("menu_id");
-                    if (menuid.equals(optionid)) {
-                        orderMenuData.setOption(arrayoption.toString());
-                    }
-                }
-                menuData.add(orderMenuData);
-            }
+            menuAdapter1 = new CategoryAdapter1(categoryData1, OrderPage.this);
+            menuRecycleView1.setAdapter(menuAdapter1);
 
             menuAdapter = new MenuAdapter(menuData, OrderPage.this);
             menuRecycleView.setAdapter(menuAdapter);
 
+//            PhRecyclerViewAdapter phRecyclerViewAdapter = new PhRecyclerViewAdapter(menuData);
+//            menuRecycleView.setAdapter(phRecyclerViewAdapter);
 
         } catch (JSONException e) {
             e.printStackTrace();
